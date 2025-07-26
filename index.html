@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Password Generator (GitHub Pages) 🗝️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      background: #121914;
+      color: #cce6cc;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin: 0.6rem 0 0.2rem;
+    }
+    input[type="checkbox"] {
+      margin-right: 0.4rem;
+    }
+    input[type="number"] {
+      width: 4rem;
+      padding: 0.3rem;
+      margin-left: 0.5rem;
+      background: #2a3a2a;
+      border: 1px solid #446644;
+      color: #cce6cc;
+      border-radius: 4px;
+    }
+    button {
+      background: #3a6f3a;
+      color: #cce6cc;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      margin-top: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #519151;
+    }
+    .result {
+      margin-top: 1.5rem;
+      background: #223322;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔐 Password Generator</h1>
+
+  <form id="pwForm">
+    <label><input type="checkbox" id="chkLower" checked />英字（小文字）</label>
+    <label><input type="checkbox" id="chkUpper" checked />英字（大文字）</label>
+    <label><input type="checkbox" id="chkNumber" checked />数字</label>
+    <label><input type="checkbox" id="chkSymbol" checked />記号 (!?#$%&=~/*-_+@)</label>
+    <label><input type="checkbox" id="chkExcludeAmbiguous" checked />曖昧文字を除く (Ilji1Oo0)</label>
+
+    <label>
+      文字数:
+      <input type="number" id="length" min="8" max="64" value="16" />
+    </label>
+
+    <label>
+      生成数:
+      <input type="number" id="count" min="1" max="20" value="6" />
+    </label>
+
+    <button type="submit">生成</button>
+  </form>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    const form = document.getElementById("pwForm");
+    const resultDiv = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const params = new URLSearchParams({
+        lower: document.getElementById("chkLower").checked ? "1" : "0",
+        upper: document.getElementById("chkUpper").checked ? "1" : "0",
+        number: document.getElementById("chkNumber").checked ? "1" : "0",
+        symbol: document.getElementById("chkSymbol").checked ? "1" : "0",
+        excludeAmbiguous: document.getElementById("chkExcludeAmbiguous").checked ? "1" : "0",
+        length: document.getElementById("length").value,
+        count: document.getElementById("count").value
+      });
+
+      const apiUrl = `https://password-api.hamusata.workers.dev/api/password?${params.toString()}`;
+
+      try {
+        const resp = await fetch(apiUrl);
+        if (!resp.ok) throw new Error(`通信エラー: ${resp.status}`);
+
+        const data = await resp.json();
+
+        if (data.error) {
+          resultDiv.textContent = `エラー: ${data.error}`;
+          return;
+        }
+
+        resultDiv.textContent = data.passwords.join("\n");
+      } catch (err) {
+        resultDiv.textContent = `エラーが発生しました。\n${err.message}`;
+      }
+    });
+  </script>
+
+</body>
+</html>
