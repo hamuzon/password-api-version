@@ -15,8 +15,8 @@
       font-family: 'Inter', 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
     }
     body {
-      background: linear-gradient(to bottom, #ffcf91 0%, #a96bf8 100%);
-      color: #fff;
+      background: linear-gradient(to bottom, #ffefba 0%, #ffffff 100%);
+      color: #111;
       text-align: center;
       min-height: 100vh;
       display: flex;
@@ -25,24 +25,24 @@
       padding: 1rem;
     }
     .container {
-      background: rgba(0,0,0,0.25);
-      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
       border-radius: 1.5rem;
       max-width: 600px;
       margin: auto;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      padding: 2rem 2.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
     h1 {
       font-weight: 800;
       font-size: 2.5rem;
       margin-bottom: 1.5rem;
       cursor: pointer;
+      color: #333;
     }
     form {
       text-align: left;
-      color: #e2e8f0;
-      user-select: none;
+      color: #444;
     }
     label {
       display: flex;
@@ -71,10 +71,10 @@
       width: 60px;
       padding: 0.25rem;
       border-radius: 6px;
-      border: none;
+      border: 1px solid #ccc;
       font-weight: 600;
       text-align: center;
-      color: #000;
+      color: #333;
     }
     #results {
       display: grid;
@@ -83,170 +83,151 @@
       margin-top: 2rem;
     }
     .result-item {
-      background: #a96bf8;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
+      background: #c7e8f9; /* 淡い水色 */
+      border-radius: 14px;
+      padding: 1rem 1.5rem;
       font-family: monospace;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       user-select: all;
       cursor: pointer;
-      box-shadow: 0 3px 10px rgb(169 107 248 / 0.6);
+      box-shadow: 0 6px 12px rgba(0,123,255,0.15);
       transition: background-color 0.3s ease;
+      color: #03314b; /* 濃いネイビーブルー文字 */
       word-break: break-word;
     }
     .result-item:hover {
-      background-color: #c19cff;
+      background-color: #a1d1ff; /* 少し濃い水色 */
     }
     button {
       margin-top: 1.5rem;
       width: 100%;
-      background: #a96bf8;
+      background: #3399ff;
       border: none;
       padding: 0.75rem;
       font-size: 1.2rem;
-      border-radius: 12px;
+      border-radius: 14px;
       font-weight: 700;
       color: #fff;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgb(169 107 248 / 0.7);
+      box-shadow: 0 6px 15px rgba(51,153,255,0.7);
       transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #7e4ed9;
-    }
-    .footer-text {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #ddd;
-      user-select: none;
+      background-color: #1673e6;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 tabindex="0" title="クリックで再生成 / Click to regenerate" id="title">
-      🔑 Password Generator App 🗝️<br />
-      <small>パスワード生成アプリ / Password Generator Tool</small>
-    </h1>
-    <form id="optionsForm" autocomplete="off" aria-label="Password generation options">
-      <label><input type="checkbox" id="lower" checked /> 英字（小文字） / Lowercase</label>
-      <label><input type="checkbox" id="upper" checked /> 英字（大文字） / Uppercase</label>
-      <label><input type="checkbox" id="number" checked /> 数字 / Numbers</label>
-      <label><input type="checkbox" id="symbol" /> 記号 / Symbols (!?#$%&=~/*-_+@)</label>
-      <label><input type="checkbox" id="excludeAmbiguous" checked /> 曖昧文字を除外 (Ilji1Oo0) / Exclude ambiguous chars</label>
-
+    <h1 title="クリックで再生成">🔑 Password Generator App 🗝️</h1>
+    <form id="form">
+      <label><input type="checkbox" id="chkLower" checked /> 英字（小文字） / Lowercase</label>
+      <label><input type="checkbox" id="chkUpper" checked /> 英字（大文字） / Uppercase</label>
+      <label><input type="checkbox" id="chkNumber" checked /> 数字 / Numbers</label>
+      <label><input type="checkbox" id="chkSymbol" /> 記号 (!?#$%&=~/*-_+@) / Symbols</label>
+      <label><input type="checkbox" id="chkExcludeAmbiguous" checked /> 判別しづらい文字 (Ilji1Oo0)を除く / Exclude ambiguous</label>
       <div class="range-group">
-        <label for="lengthRange">文字数 / Length</label>
-        <input type="range" id="lengthRange" min="8" max="64" value="16" aria-valuemin="8" aria-valuemax="64" />
+        <label for="lengthRange">文字数 / Length:</label>
+        <input type="range" id="lengthRange" min="8" max="64" value="16" />
         <input type="number" id="lengthNumber" min="8" max="64" value="16" />
       </div>
-
       <div class="range-group">
-        <label for="countRange">生成個数 / Count</label>
-        <input type="range" id="countRange" min="1" max="20" value="6" aria-valuemin="1" aria-valuemax="20" />
+        <label for="countRange">生成個数 / Count:</label>
+        <input type="range" id="countRange" min="1" max="20" value="6" />
         <input type="number" id="countNumber" min="1" max="20" value="6" />
       </div>
-
-      <button type="button" id="generateBtn" aria-label="Generate passwords">パスワード生成 / Generate</button>
+      <button type="button" id="generateBtn">生成 / Generate</button>
     </form>
-
-    <div id="results" aria-live="polite" aria-label="Generated passwords"></div>
-
-    <p class="footer-text">クリックでコピーできます / Click a password to copy</p>
+    <div id="results" aria-live="polite" aria-label="生成されたパスワード / Generated Passwords"></div>
   </div>
 
   <script>
     const apiUrl = "https://password-api.hamusata.workers.dev/api/password";
 
-    // UI Elements
-    const lower = document.getElementById("lower");
-    const upper = document.getElementById("upper");
-    const number = document.getElementById("number");
-    const symbol = document.getElementById("symbol");
-    const excludeAmbiguous = document.getElementById("excludeAmbiguous");
-
+    // 入力要素取得
+    const chkLower = document.getElementById("chkLower");
+    const chkUpper = document.getElementById("chkUpper");
+    const chkNumber = document.getElementById("chkNumber");
+    const chkSymbol = document.getElementById("chkSymbol");
+    const chkExcludeAmbiguous = document.getElementById("chkExcludeAmbiguous");
     const lengthRange = document.getElementById("lengthRange");
     const lengthNumber = document.getElementById("lengthNumber");
     const countRange = document.getElementById("countRange");
     const countNumber = document.getElementById("countNumber");
-
+    const resultsDiv = document.getElementById("results");
     const generateBtn = document.getElementById("generateBtn");
-    const results = document.getElementById("results");
-    const title = document.getElementById("title");
 
-    // Sync range and number inputs
-    function syncInputs(rangeEl, numberEl) {
-      rangeEl.addEventListener("input", () => {
-        numberEl.value = rangeEl.value;
-      });
-      numberEl.addEventListener("input", () => {
-        let val = parseInt(numberEl.value);
-        if (isNaN(val)) val = parseInt(rangeEl.min);
-        val = Math.min(Math.max(val, parseInt(rangeEl.min)), parseInt(rangeEl.max));
-        numberEl.value = val;
-        rangeEl.value = val;
-      });
-    }
-    syncInputs(lengthRange, lengthNumber);
-    syncInputs(countRange, countNumber);
+    // スライダーと数値ボックス同期
+    lengthRange.addEventListener("input", () => {
+      lengthNumber.value = lengthRange.value;
+    });
+    lengthNumber.addEventListener("input", () => {
+      let val = parseInt(lengthNumber.value);
+      if (isNaN(val) || val < 8) val = 8;
+      if (val > 64) val = 64;
+      lengthNumber.value = val;
+      lengthRange.value = val;
+    });
+    countRange.addEventListener("input", () => {
+      countNumber.value = countRange.value;
+    });
+    countNumber.addEventListener("input", () => {
+      let val = parseInt(countNumber.value);
+      if (isNaN(val) || val < 1) val = 1;
+      if (val > 20) val = 20;
+      countNumber.value = val;
+      countRange.value = val;
+    });
 
-    // Copy to clipboard with feedback
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Copied to clipboard: " + text);
-      });
-    }
-
-    // Generate passwords using API
+    // パスワード生成リクエスト
     async function generatePasswords() {
+      resultsDiv.innerHTML = "読み込み中…";
+
       const params = new URLSearchParams({
-        lower: lower.checked ? "1" : "0",
-        upper: upper.checked ? "1" : "0",
-        number: number.checked ? "1" : "0",
-        symbol: symbol.checked ? "1" : "0",
-        excludeAmbiguous: excludeAmbiguous.checked ? "1" : "0",
-        length: lengthNumber.value,
-        count: countNumber.value,
+        lower: chkLower.checked ? "1" : "0",
+        upper: chkUpper.checked ? "1" : "0",
+        number: chkNumber.checked ? "1" : "0",
+        symbol: chkSymbol.checked ? "1" : "0",
+        excludeAmbiguous: chkExcludeAmbiguous.checked ? "1" : "0",
+        length: lengthRange.value,
+        count: countRange.value
       });
 
       try {
-        const res = await fetch(`${apiUrl}?${params.toString()}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        displayResults(data.passwords);
+        const response = await fetch(`${apiUrl}?${params.toString()}`);
+        if (!response.ok) throw new Error("通信エラー: " + response.status);
+
+        const data = await response.json();
+
+        if (data.error) {
+          resultsDiv.innerHTML = `<p style="color:red;">エラー: ${data.error}</p>`;
+          return;
+        }
+
+        // パスワード表示
+        resultsDiv.innerHTML = "";
+        data.passwords.forEach((pwd, i) => {
+          const div = document.createElement("div");
+          div.className = "result-item";
+          div.textContent = pwd;
+          div.title = "クリックでコピー";
+          div.addEventListener("click", () => {
+            navigator.clipboard.writeText(pwd);
+            alert(`パスワードをコピーしました: ${pwd}`);
+          });
+          resultsDiv.appendChild(div);
+        });
+
       } catch (e) {
-        results.innerHTML = `<p>エラーが発生しました。${e.message} / Error occurred: ${e.message}</p>`;
+        resultsDiv.innerHTML = `<p style="color:red;">通信エラーが発生しました。${e.message}</p>`;
       }
     }
 
-    // Display generated passwords
-    function displayResults(passwords) {
-      results.innerHTML = "";
-      const colors = ["#68D391", "#F59E0B", "#3B82F6", "#EC4899", "#8B5CF6", "#F87171"];
-
-      passwords.forEach((pwd, i) => {
-        const div = document.createElement("div");
-        div.className = "result-item";
-        div.textContent = pwd;
-        div.style.background = `linear-gradient(135deg, ${colors[i % colors.length]}, #000000aa)`;
-        div.tabIndex = 0;
-        div.title = "クリックでコピー / Click to copy";
-        div.addEventListener("click", () => copyToClipboard(pwd));
-        div.addEventListener("keydown", (e) => {
-          if(e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            copyToClipboard(pwd);
-          }
-        });
-        results.appendChild(div);
-      });
-    }
-
-    generateBtn.addEventListener("click", generatePasswords);
-    title.addEventListener("click", generatePasswords);
-
     // 初期生成
     generatePasswords();
+
+    // ボタンイベント
+    generateBtn.addEventListener("click", generatePasswords);
   </script>
 </body>
 </html>
