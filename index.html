@@ -83,7 +83,7 @@
       margin-top: 2rem;
     }
     .result-item {
-      background: #c7e8f9; /* 淡い水色 */
+      background: #c7e8f9;
       border-radius: 14px;
       padding: 1rem 1.5rem;
       font-family: monospace;
@@ -92,11 +92,11 @@
       cursor: pointer;
       box-shadow: 0 6px 12px rgba(0,123,255,0.15);
       transition: background-color 0.3s ease;
-      color: #03314b; /* 濃いネイビーブルー文字 */
+      color: #03314b;
       word-break: break-word;
     }
     .result-item:hover {
-      background-color: #a1d1ff; /* 少し濃い水色 */
+      background-color: #a1d1ff;
     }
     button {
       margin-top: 1.5rem;
@@ -139,12 +139,16 @@
       <button type="button" id="generateBtn">生成 / Generate</button>
     </form>
     <div id="results" aria-live="polite" aria-label="生成されたパスワード / Generated Passwords"></div>
+
+    <!-- 🔒 注意書き：ログや個人情報を保存しません -->
+    <p style="font-size:0.85rem; color:#666; margin-top:2rem; text-align:center; user-select:none;">
+      ※このパスワード生成アプリはログの保存や個人情報の収集を一切行っていません。
+    </p>
   </div>
 
   <script>
     const apiUrl = "https://password-api.hamusata.workers.dev/api/password";
 
-    // 入力要素取得
     const chkLower = document.getElementById("chkLower");
     const chkUpper = document.getElementById("chkUpper");
     const chkNumber = document.getElementById("chkNumber");
@@ -157,7 +161,6 @@
     const resultsDiv = document.getElementById("results");
     const generateBtn = document.getElementById("generateBtn");
 
-    // スライダーと数値ボックス同期
     lengthRange.addEventListener("input", () => {
       lengthNumber.value = lengthRange.value;
     });
@@ -179,7 +182,6 @@
       countRange.value = val;
     });
 
-    // パスワード生成リクエスト
     async function generatePasswords() {
       resultsDiv.innerHTML = "読み込み中…";
 
@@ -204,9 +206,8 @@
           return;
         }
 
-        // パスワード表示
         resultsDiv.innerHTML = "";
-        data.passwords.forEach((pwd, i) => {
+        data.passwords.forEach((pwd) => {
           const div = document.createElement("div");
           div.className = "result-item";
           div.textContent = pwd;
@@ -223,10 +224,7 @@
       }
     }
 
-    // 初期生成
     generatePasswords();
-
-    // ボタンイベント
     generateBtn.addEventListener("click", generatePasswords);
   </script>
 </body>
