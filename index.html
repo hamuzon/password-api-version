@@ -173,20 +173,24 @@
     lengthRange.addEventListener("input", () => {
       lengthNumber.value = lengthRange.value;
     });
-    lengthNumber.addEventListener("input", () => {
-      let val = parseInt(lengthNumber.value);
-      if (isNaN(val) || val < 8) val = 8;
-      if (val > 64) val = 64;
+    lengthNumber.addEventListener("change", () => {
+      let val = parseInt(lengthNumber.value, 10);
+      const min = parseInt(lengthNumber.min, 10);
+      const max = parseInt(lengthNumber.max, 10);
+      if (isNaN(val) || val < min) val = min;
+      if (val > max) val = max;
       lengthNumber.value = val;
       lengthRange.value = val;
     });
     countRange.addEventListener("input", () => {
       countNumber.value = countRange.value;
     });
-    countNumber.addEventListener("input", () => {
-      let val = parseInt(countNumber.value);
-      if (isNaN(val) || val < 1) val = 1;
-      if (val > 20) val = 20;
+    countNumber.addEventListener("change", () => {
+      let val = parseInt(countNumber.value, 10);
+      const min = parseInt(countNumber.min, 10);
+      const max = parseInt(countNumber.max, 10);
+      if (isNaN(val) || val < min) val = min;
+      if (val > max) val = max;
       countNumber.value = val;
       countRange.value = val;
     });
